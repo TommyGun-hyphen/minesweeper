@@ -24,8 +24,10 @@
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
-	gfx( wnd )
+	gfx( wnd ),
+	board(0,0)
 {
+	board.Center(Graphics::ScreenWidth, Graphics::ScreenHeight);
 }
 
 void Game::Go()
@@ -42,4 +44,7 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
+	gfx.fillScreen(Colors::LightGray);
+	board.Draw(gfx);
+	
 }

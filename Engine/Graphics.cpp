@@ -252,6 +252,165 @@ Graphics::~Graphics()
 	if( pImmediateContext ) pImmediateContext->ClearState();
 }
 
+void Graphics::fillScreen(Color color)
+{
+	for (int i = 0; i < ScreenWidth; i++) {
+		for (int j = 0; j < ScreenHeight; j++) {
+			PutPixel(i, j, color);
+		}
+	}
+}
+
+void Graphics::DrawTriangleRA_TL(int x, int y, int length, Color c)
+{
+	int iteration = 0;
+	for (int i = x; i < x + length; i++, iteration++) {
+		for (int j = y; j <= y + length - iteration; j++) {
+			PutPixel(i, j, c);
+		}
+	}
+}
+
+void Graphics::DrawTriangleRA_TR(int x, int y, int length, Color c)
+{
+	int iteration = 0;
+	for (int i = x; i > x - length; i--, iteration++) {
+		for (int j = y; j <= y + length - iteration; j++) {
+			PutPixel(i, j, c);
+		}
+	}
+}
+
+void Graphics::DrawTriangleRA_BL(int x, int y, int length, Color c)
+{
+	int iteration = 0;
+	for (int i = x; i < x + length; i++, iteration++) {
+		for (int j = y; j >= y - length + iteration; j--) {
+			PutPixel(i, j, c);
+		}
+	}
+}
+
+void Graphics::DrawTriangleRA_BR(int x, int y, int length, Color c)
+{
+	int iteration = 0;
+	for (int i = x; i > x - length; i--, iteration++) {
+		for (int j = y; j >= y - length + iteration; j--) {
+			PutPixel(i, j, c);
+		}
+	}
+}
+
+void Graphics::Draw3DRect(int x, int y, int width, int height, int rimSize, Color baseColor)
+{
+	float top_factor = 0.8f;
+	float left_factor = 0.7f;
+	float bottom_factor = 1.2f;
+	float right_factor = 1.3f;
+
+	Color topColor = Color(
+		baseColor.GetR() * top_factor,
+		baseColor.GetG() * top_factor,
+		baseColor.GetB() * top_factor
+	);
+	Color leftColor = Color(
+		baseColor.GetR() * left_factor,
+		baseColor.GetG() * left_factor,
+		baseColor.GetB() * left_factor
+	);
+	Color bottomColor = Color(
+		baseColor.GetR() * bottom_factor,
+		baseColor.GetG() * bottom_factor,
+		baseColor.GetB() * bottom_factor
+	);
+	Color rightColor = Color(
+		baseColor.GetR() * right_factor,
+		baseColor.GetG() * right_factor,
+		baseColor.GetB() * right_factor
+	);
+
+	//Draw body rect
+	for (int i = x + rimSize; i < x + width - rimSize; i++) {
+		for (int j = y + rimSize; j < y + height - rimSize; j++) {
+			PutPixel(i, j, baseColor);
+		}
+	}
+	//Draw top side
+	for (int i = x + rimSize; i < x + width - rimSize; i++) {
+		for (int j = y; j < y + rimSize; j++) {
+			PutPixel(i, j, topColor);
+		}
+	}
+	DrawTriangleRA_TR(x + rimSize, y, rimSize, topColor);
+	DrawTriangleRA_TL(x + width - rimSize, y, rimSize, topColor);
+	//Draw bottom side
+	for (int i = x + rimSize; i < x + width - rimSize; i++) {
+		for (int j = y + height - rimSize; j <= y + height; j++) {
+			PutPixel(i, j, bottomColor);
+		}
+	}
+	DrawTriangleRA_BR(x + rimSize, y + height, rimSize, bottomColor);
+	DrawTriangleRA_BL(x + width - rimSize, y + height, rimSize, bottomColor);
+	//Draw left side
+	for (int i = x; i < x + rimSize; i++) {
+		for (int j = y + rimSize; j < y + height - rimSize; j++) {
+			PutPixel(i, j, leftColor);
+		}
+	}
+	DrawTriangleRA_BL(x, y + rimSize, rimSize, leftColor);
+	DrawTriangleRA_TL(x, y + height - rimSize, rimSize, leftColor);
+	//Draw right side
+	for (int i = x + width - rimSize; i <= x + width; i++) {
+		for (int j = y + rimSize; j < y + height - rimSize; j++) {
+			PutPixel(i, j, rightColor);
+		}
+	}
+	DrawTriangleRA_BR(x + width, y + rimSize, rimSize, rightColor);
+	DrawTriangleRA_TR(x + width, y + height - rimSize, rimSize, rightColor);
+}
+void Graphics::Draw3DRect(int x, int y, int width, int height, int rimSize, Color baseColor, Color topColor, Color bottomColor, Color leftColor, Color rightColor)
+{
+	
+
+	//Draw body rect
+	for (int i = x + rimSize; i < x + width - rimSize; i++) {
+		for (int j = y + rimSize; j < y + height - rimSize; j++) {
+			PutPixel(i, j, baseColor);
+		}
+	}
+	//Draw top side
+	for (int i = x + rimSize; i < x + width - rimSize; i++) {
+		for (int j = y; j < y + rimSize; j++) {
+			PutPixel(i, j, topColor);
+		}
+	}
+	DrawTriangleRA_TR(x + rimSize, y, rimSize, topColor);
+	DrawTriangleRA_TL(x + width - rimSize, y, rimSize, topColor);
+	//Draw bottom side
+	for (int i = x + rimSize; i < x + width - rimSize; i++) {
+		for (int j = y + height - rimSize; j <= y + height; j++) {
+			PutPixel(i, j, bottomColor);
+		}
+	}
+	DrawTriangleRA_BR(x + rimSize, y + height, rimSize, bottomColor);
+	DrawTriangleRA_BL(x + width - rimSize, y + height, rimSize, bottomColor);
+	//Draw left side
+	for (int i = x; i < x + rimSize; i++) {
+		for (int j = y + rimSize; j < y + height - rimSize; j++) {
+			PutPixel(i, j, leftColor);
+		}
+	}
+	DrawTriangleRA_BL(x, y + rimSize, rimSize, leftColor);
+	DrawTriangleRA_TL(x, y + height - rimSize, rimSize, leftColor);
+	//Draw right side
+	for (int i = x + width - rimSize; i <= x + width; i++) {
+		for (int j = y + rimSize; j < y + height - rimSize; j++) {
+			PutPixel(i, j, rightColor);
+		}
+	}
+	DrawTriangleRA_BR(x + width, y + rimSize, rimSize, rightColor);
+	DrawTriangleRA_TR(x + width, y + height - rimSize, rimSize, rightColor);
+}
 void Graphics::EndFrame()
 {
 	HRESULT hr;

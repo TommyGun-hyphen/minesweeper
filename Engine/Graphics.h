@@ -58,6 +58,14 @@ public:
 	}
 	void PutPixel( int x,int y,Color c );
 	~Graphics();
+
+	void fillScreen(Color color);
+	void DrawTriangleRA_TL(int x, int y, int length, Color c); //draws a right angle triangle, with the right angle being TL(top left)
+	void DrawTriangleRA_TR(int x, int y, int length, Color c);
+	void DrawTriangleRA_BL(int x, int y, int length, Color c);
+	void DrawTriangleRA_BR(int x, int y, int length, Color c);
+	void Draw3DRect(int x, int y, int width, int height, int rimSize, Color baseColor);
+	void Draw3DRect(int x, int y, int width, int height, int rimSize, Color baseColor, Color topColor, Color bottomColor, Color leftColor, Color rightColor);
 private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain>				pSwapChain;
 	Microsoft::WRL::ComPtr<ID3D11Device>				pDevice;
